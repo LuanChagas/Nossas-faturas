@@ -1,44 +1,65 @@
-import { CheckCircledIcon } from "@radix-ui/react-icons";
 import Input from "../../shared/global/Input";
 import Label from "../../shared/global/Label";
-import { toast } from "../../ui/use-toast";
 import { Controller, useForm } from "react-hook-form";
 import ErrosInputs from "../../shared/global/ErrosInputs";
+import { formatoMoeda } from "@/utils/masks/ValueMask";
+import { useMutatationCartoes } from "@/Hooks/CartaoHooks";
+import { createCartaoApi, updateCartaoApi } from "@/api/CartaoApi";
+import { EAcaoMutationHooks } from "@/types/HooksCustom";
+import { removeMoeda } from "@/utils/masks/RemoveMask";
 
 type CadastroCartoesProps = {
   closedDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  cartao?: Cartao;
+  urlQuery: string;
 };
 
-interface IFormInputs {
-  nome: string;
-  pix: string;
-  fechamento: number | undefined;
-  vencimento: number | undefined;
-  limiteTotal: number | undefined;
-  limiteDisponivel: number | undefined;
-}
-
-const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
+const CadastroCartoes = ({
+  closedDialog,
+  cartao,
+  urlQuery,
+}: CadastroCartoesProps) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInputs>({
+  } = useForm<IFormInputsCartao>({
     defaultValues: {
-      nome: "",
-      pix: "",
-      fechamento: undefined,
-      vencimento: undefined,
-      limiteTotal: undefined,
-      limiteDisponivel: undefined,
+      id: cartao?.id || 0,
+      nome: cartao?.nome || "",
+      pix: cartao?.pix || "",
+      fechamento: cartao?.dia_fechamento || "",
+      vencimento: cartao?.dia_vencimento || "",
+      limiteTotal: cartao?.limite_total
+        ? formatoMoeda(Number(cartao?.limite_total))
+        : "R$ 0,00",
+      limiteDisponivel: cartao?.limite_disponivel
+        ? formatoMoeda(Number(cartao?.limite_disponivel))
+        : "R$ 0,00",
     },
   });
 
-  const onSubmit = (data: IFormInputs) => {
-    toast({
-      title: "Cadastro realizado com sucesso!",
-      description: "Luan cadastrada(o) com sucesso!",
-      icon: <CheckCircledIcon className="w-5 h-5" color="#15803d" />,
+  const mutation = useMutatationCartoes(
+    urlQuery,
+    cartao ? updateCartaoApi : createCartaoApi,
+    cartao ? EAcaoMutationHooks.EDITAR : EAcaoMutationHooks.CADASTRAR
+  );
+
+  const onSubmit = (data: IFormInputsCartao) => {
+    removeMoeda(data.limiteDisponivel);
+    console.log({
+      dia_fechamento: data.fechamento,
+      dia_vencimento: data.vencimento,
+      limite_disponivel: removeMoeda(data.limiteDisponivel),
+      limite_total: removeMoeda(data.limiteTotal),
+      ...data,
+    });
+    mutation.mutate({
+      dia_fechamento: data.fechamento,
+      dia_vencimento: data.vencimento,
+      limite_disponivel: removeMoeda(data.limiteDisponivel),
+      limite_total: removeMoeda(data.limiteTotal),
+      ...data,
     });
     closedDialog(false);
   };
@@ -46,10 +67,31 @@ const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
   return (
     <section>
       <section>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-1 pt-5"
-        >
+        <section>
+          {errors.nome && <ErrosInputs title="Nome é obrigatório" />}
+          {errors.pix && <ErrosInputs title="PIX é obrigatório" />}
+          {errors.fechamento?.type === "required" && (
+            <ErrosInputs title="Campo obrigatório" />
+          )}
+          {(errors.fechamento?.type === "min" ||
+            errors.fechamento?.type === "max") && (
+            <ErrosInputs title="Fechamento deve ser maior que 0 e menor que 31" />
+          )}
+          {errors.vencimento?.type === "required" && (
+            <ErrosInputs title="Vencimento é obrigatório" />
+          )}
+          {(errors.vencimento?.type === "min" ||
+            errors.vencimento?.type === "max") && (
+            <ErrosInputs title=" Vencimento deve ser maior que 0 e menor que 31" />
+          )}
+          {errors.limiteTotal && (
+            <ErrosInputs title="Limite total é obrigatório" />
+          )}
+          {errors.limiteDisponivel && (
+            <ErrosInputs title="Limite disponivel é obrigatório" />
+          )}
+        </section>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
           <Label title="Nome" htmlFor="nome" />
           <Controller
             name="nome"
@@ -57,9 +99,6 @@ const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
             rules={{ required: true }}
             render={({ field }) => <Input type="text" id="nome" {...field} />}
           />
-          {errors.nome && (
-            <ErrosInputs title="Nome é obrigatório" className="w-40" />
-          )}
 
           <Label title="PIX" htmlFor="pix" />
           <Controller
@@ -68,9 +107,7 @@ const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
             rules={{ required: true }}
             render={({ field }) => <Input type="text" id="pix" {...field} />}
           />
-          {errors.pix && (
-            <ErrosInputs title="PIX é obrigatório" className="w-40" />
-          )}
+
           <div className="flex  sm:flex-row justify-between">
             <div className="flex flex-col ">
               <Label title="Fechamento" htmlFor="fechamento" />
@@ -91,13 +128,6 @@ const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
                   />
                 )}
               />
-              {errors.fechamento?.type === "required" && (
-                <ErrosInputs title="Campo obrigatório" className="w-32" />
-              )}
-              {(errors.fechamento?.type === "min" ||
-                errors.fechamento?.type === "max") && (
-                <ErrosInputs title="Fechamento deve ser maior que 0 e menor que 31" />
-              )}
             </div>
             <div className="flex flex-col w-40 sm:w-48 items-end">
               <Label title="Vencimento" htmlFor="vencimento" />
@@ -116,16 +146,6 @@ const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
                   />
                 )}
               />
-              {errors.vencimento?.type === "required" && (
-                <ErrosInputs
-                  title="Vencimento é obrigatório"
-                  className="w-32"
-                />
-              )}
-              {(errors.vencimento?.type === "min" ||
-                errors.vencimento?.type === "max") && (
-                <ErrosInputs title=" Vencimento deve ser maior que 0 e menor que 31" />
-              )}
             </div>
           </div>
           <div className="flex  sm:flex-row justify-between">
@@ -138,7 +158,7 @@ const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
                 render={({ field }) => (
                   <Input
                     className="w-32"
-                    type="number"
+                    type="text"
                     id="limiteTotal"
                     {...field}
                     mask="MoedaBR"
@@ -146,9 +166,6 @@ const CadastroCartoes = ({ closedDialog }: CadastroCartoesProps) => {
                   />
                 )}
               />
-              {errors.limiteTotal && (
-                <ErrosInputs title="Limite total é obrigatório" />
-              )}
             </div>
             <div className="flex flex-col w-40 sm:w-48 items-end">
               <Label title="Limite Disponível" htmlFor="limiteDisponivel" />

@@ -20,6 +20,7 @@ export const useQueryPessoaHook = (
     queryKey: [key, url],
     queryFn: () =>
       requestApi(url).then((response) => {
+        console.log(response.data.items);
         return response.data;
       }),
   });
@@ -51,8 +52,9 @@ export const useMutationPessoaHook = (
       return functionApi(data);
     },
     onSuccess: () => {
+      console.log(urlQuery);
       queryClient.invalidateQueries({ queryKey: ["getPessoas", urlQuery] });
-      showToastSucess(`Pessoa ${tipoMensagemSucess} com sucesso!`);
+      showToastSucess(`Pessoa ${tipoMensagemSucess} com sucesso!`, tipo);
     },
     onError: (error) => {
       showToastError(

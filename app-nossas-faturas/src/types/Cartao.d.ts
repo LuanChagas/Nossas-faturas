@@ -14,7 +14,12 @@ interface CartaoPaginated {
   links: LinksPaginated;
 }
 
-interface IFormInputsLoja {
+interface IFormInputsCartao {
   id?: number;
   nome: string;
+  pix: string;
+  fechamento: string;
+  vencimento: string;
+  limiteTotal: string;
+  limiteDisponivel: string;
 }

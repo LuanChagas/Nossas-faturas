@@ -10,16 +10,23 @@ import { useQueryPessoaHook } from "@/Hooks/PessoaHooks";
 import { getPessoasApi } from "@/api/PessoaApi";
 import { getLojasApi } from "@/api/lojaApi";
 import { useQueryLojaHook } from "@/Hooks/LojaHooks";
-import { useQuery } from "@tanstack/react-query";
 
-import { getCartoes } from "@/api/CartaoApi";
+import { useQueryCartao } from "@/Hooks/CartaoHooks";
+import { getCartoesApi } from "@/api/CartaoApi";
 
 const Cadastros = () => {
   const [componentOpen, setComponentOpen] = React.useState<number>(1);
   const [title, setTitle] = React.useState<string>("Cadastrar Loja");
-  const [urlQuery, setUrlQuery] = React.useState<string>("lojas?limit=10");
-  const [urlLoja, setUrlLoja] = React.useState<string>("lojas?limit=10");
-  const [urlPessoa, setUrlPessoa] = React.useState<string>("pessoas?limit=10");
+  const [urlQuery, setUrlQuery] = React.useState<string>(
+    "lojas?page=1&limit=10"
+  );
+  const [urlLoja, setUrlLoja] = React.useState<string>("lojas?page=1&limit=10");
+  const [urlPessoa, setUrlPessoa] = React.useState<string>(
+    "pessoas?page=1&limit=10"
+  );
+  const [urlCartao, setUrlCartao] = React.useState<string>(
+    "cartoes?page=1&limit=10"
+  );
   function handleDadosDialog(title: string, component: number) {
     setTitle(title);
     setComponentOpen(component);
@@ -37,11 +44,11 @@ const Cadastros = () => {
     getLojasApi
   );
 
-  const { data } = useQuery({
-    queryKey: ["getCartoes"],
-    queryFn: () =>
-      getCartoes("cartoes?limit=10").then((response) => response.data),
-  });
+  const { dataCartao, isLoadingCartao, isErrorCartao } = useQueryCartao(
+    "getCartoes",
+    urlCartao,
+    getCartoesApi
+  );
 
   return (
     <>
@@ -49,7 +56,7 @@ const Cadastros = () => {
       <section className="w-full flex flex-col justify-between sm:pt-5 align-middle">
         <DialogCadastroAndEdit
           urlQuery={urlQuery}
-          className="flex self-end sm:pb-4 md:pb-0"
+          className="flex self-end pb-4 md:pb-0"
           componentOpen={componentOpen}
           title={title}
         ></DialogCadastroAndEdit>
@@ -59,7 +66,7 @@ const Cadastros = () => {
               value="lojas"
               className="w-full"
               onClick={() => {
-                setUrlQuery("lojas?limit=10");
+                setUrlQuery("lojas?page=1&limit=10");
                 handleDadosDialog("Cadastrar Loja", 1);
               }}
             >
@@ -69,7 +76,7 @@ const Cadastros = () => {
               value="pessoas"
               className="w-full"
               onClick={() => {
-                setUrlQuery("pessoas?limit=10");
+                setUrlQuery("pessoas?page=1&limit=10");
                 handleDadosDialog("Cadastrar Pessoa", 2);
               }}
             >
@@ -78,7 +85,10 @@ const Cadastros = () => {
             <TabsTrigger
               value="cartoes"
               className="w-full"
-              onClick={() => handleDadosDialog("Cadastrar Cartão", 3)}
+              onClick={() => {
+                setUrlQuery("cartoes?page=1&limit=10");
+                handleDadosDialog("Cadastrar Cartão", 3);
+              }}
             >
               Cartões
             </TabsTrigger>
@@ -102,7 +112,14 @@ const Cadastros = () => {
             />
           </TabsContent>
           <TabsContent value="cartoes">
-            <ListaCartoes cartoes={data?.items} />
+            <ListaCartoes
+              data={dataCartao}
+              cartoes={dataCartao?.items}
+              isError={isErrorCartao}
+              isLoading={isLoadingCartao}
+              setUrlQuery={setUrlCartao}
+              urlQuery={urlCartao}
+            />
           </TabsContent>
         </Tabs>
       </section>

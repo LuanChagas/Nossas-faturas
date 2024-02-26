@@ -39,7 +39,7 @@ const ListaPessoas = ({
     <section className="flex flex-col justify-between gap-4 ">
       <ListaCadastros>
         {data?.items.map((pessoa) => (
-          <li key={pessoa.id} className="flex flex-col gap-3">
+          <li key={pessoa.id} className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="flex items-center gap-5">
                 <Avatar>

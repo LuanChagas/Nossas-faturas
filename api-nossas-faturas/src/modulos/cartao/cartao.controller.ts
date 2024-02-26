@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -54,5 +55,17 @@ export class CartaoController {
     return response
       .status(200)
       .json({ message: 'Cartão atualizado com sucesso!', statusCode: 200 });
+  }
+
+  @Delete(':id')
+  async deleteCartao(
+    @Param('id') id: number,
+    @Body() cartao: UpdateCartao,
+    @Res() response: Response,
+  ) {
+    await this.cartaoService.deleteCartao(id);
+    return response
+      .status(200)
+      .json({ message: 'Cartão deletado com sucesso!', statusCode: 200 });
   }
 }

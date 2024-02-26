@@ -37,11 +37,8 @@ const CadastroLoja = ({ closedDialog, loja, urlQuery }: CadastroLojaProps) => {
   };
 
   return (
-    <section className="flex flex-col gap-1 pt-5">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-1 pt-5"
-      >
+    <section className="flex flex-col gap-1">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
         <Label title="Nome" />
         <Controller
           name="nome"

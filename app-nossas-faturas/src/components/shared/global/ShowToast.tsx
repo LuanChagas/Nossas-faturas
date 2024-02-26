@@ -3,15 +3,20 @@ import { toast } from "../../ui/use-toast";
 import {
   randomImagens,
   randomMensagemCadastroOutros,
+  randomMensagemDeletar,
   randomMensagemErro,
   randomMensagemErroDelete,
 } from "@/utils/respostas/ArrayRespostas";
 import { Avatar, AvatarImage } from "../../ui/avatar";
+import { EAcaoMutationHooks } from "@/types/HooksCustom";
 
-export const showToastSucess = (titulo: string) => {
+export const showToastSucess = (titulo: string, tipo: EAcaoMutationHooks) => {
   toast({
     title: titulo,
-    description: randomMensagemCadastroOutros(),
+    description:
+      tipo === EAcaoMutationHooks.EXCLUIR
+        ? randomMensagemDeletar()
+        : randomMensagemCadastroOutros(),
     icon: <CheckCircledIcon className="w-5 h-5" color="#15803d" />,
     image: (
       <Avatar className="w-16 h-16">

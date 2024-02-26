@@ -35,6 +35,7 @@ const PaginationShared = ({
 
   const changePage = useCallback(
     (url: string) => {
+      console.log(url);
       setUrlQuery(url);
       //queryClient.invalidateQueries({ queryKey: ["getLojas"] });
     },

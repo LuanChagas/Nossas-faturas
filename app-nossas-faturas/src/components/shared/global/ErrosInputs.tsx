@@ -8,9 +8,7 @@ type ErrosInputsProps = {
 
 const ErrosInputs = ({ title, className }: ErrosInputsProps) => {
   return (
-    <section
-      className={`${className} flex  border border-red-500 rounded-lg p-1`}
-    >
+    <section className={`${className} flex  border border-red-300 rounded-lg`}>
       <AlertDescription className="text-sm pl-1 text-red-400 ">
         {title}
       </AlertDescription>

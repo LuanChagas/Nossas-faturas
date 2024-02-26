@@ -5,7 +5,6 @@ type TypeMaskInput = "DiaSemana" | "MoedaBR";
 
 const ImaskInput = (
   mask: TypeMaskInput,
-
   e: React.ChangeEvent<HTMLInputElement>
 ) => {
   const maskHandlers = {

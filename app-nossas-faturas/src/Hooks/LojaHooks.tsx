@@ -46,7 +46,7 @@ export const useMutationLojaHook = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getLojas", urlQuery] });
-      showToastSucess(`Loja ${tipoMensagemSucess} com sucesso!`);
+      showToastSucess(`Loja ${tipoMensagemSucess} com sucesso!`, tipo);
     },
     onError: (error) => {
       showToastError(`Erro ao ${tipoMensagemError} loja!`);

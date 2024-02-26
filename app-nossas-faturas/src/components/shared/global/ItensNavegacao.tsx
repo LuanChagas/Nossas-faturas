@@ -2,7 +2,11 @@ import { IdCardIcon } from "@radix-ui/react-icons";
 import { BackpackIcon, FileText, HomeIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const ItensNavegacao = () => {
+interface ItensNavegacaoProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
   return (
     <>
       <section className="flex flex-col h-full justify-between py-14 w-full pl-5">
@@ -34,7 +38,11 @@ const ItensNavegacao = () => {
             </div>
           </li>
           <li className="flex w-full justify-start">
-            <Link to={"cadastro"} className="flex justify-between">
+            <Link
+              to={"cadastro"}
+              className="flex justify-between"
+              onClick={() => setOpen(!open)}
+            >
               <div>
                 <IdCardIcon height={24} width={24} />
               </div>

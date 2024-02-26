@@ -10,9 +10,12 @@ export const diasMes = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 export const moedaBR = (e: React.ChangeEvent<HTMLInputElement>) => {
   const value = e.target.value;
+
   const valueMask = parseFloat(
     value.replace(/[^\d]/g, "").replace(/(\d{2})$/, ".$1")
   );
+
+  if (isNaN(valueMask)) return (e.target.value = "R$ 0,00");
   const valueMaskParseFormat = valueMask.toFixed(2);
   const valorFormatado = parseFloat(valueMaskParseFormat).toLocaleString(
     "pt-BR",

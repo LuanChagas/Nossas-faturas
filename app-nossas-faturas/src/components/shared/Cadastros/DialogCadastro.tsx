@@ -19,7 +19,7 @@ type DialogCadastroProps = {
   title: string;
   loja?: Loja;
   pessoa?: Pessoa;
-  cartao?: any;
+  cartao?: Cartao;
   urlQuery: string;
 };
 
@@ -33,7 +33,7 @@ const DialogCadastroAndEdit = ({
   urlQuery,
 }: DialogCadastroProps) => {
   const [open, setOpen] = React.useState(false);
-  const existeData = loja || pessoa ? true : false;
+  const existeData = loja || pessoa || cartao ? true : false;
   return (
     <section className={className}>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -81,7 +81,13 @@ const DialogCadastroAndEdit = ({
               urlQuery={urlQuery}
             />
           )}
-          {componentOpen === 3 && <CadastroCartoes closedDialog={setOpen} />}
+          {componentOpen === 3 && (
+            <CadastroCartoes
+              closedDialog={setOpen}
+              urlQuery={urlQuery}
+              cartao={cartao}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </section>

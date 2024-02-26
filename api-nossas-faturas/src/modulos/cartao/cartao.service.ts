@@ -35,4 +35,8 @@ export class CartaoService {
   async getCartaoById(id: number) {
     return await this.cartaoRepository.findOne({ where: { id: id } });
   }
+
+  async deleteCartao(id: number) {
+    return await this.cartaoRepository.delete(id);
+  }
 }

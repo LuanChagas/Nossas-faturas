@@ -41,9 +41,23 @@ export class CompraService {
   }
 
   async getCompras() {
-    return await this.compraRepository.find();
+    return await this.compraRepository
+      .createQueryBuilder('c')
+      .select([
+        'c.id as id',
+        'p.nome as pessoa',
+        'c.descricao as descricao',
+        'l.nome as loja',
+        'ct.nome as cartao',
+        'c.data_compra as data',
+        'c.valor as valor',
+        'c.parcelas as parcelas',
+      ])
+      .innerJoin('pessoas', 'p', 'p.id = c.pessoa_id')
+      .innerJoin('lojas', 'l', 'l.id = c.loja_id')
+      .innerJoin('cartoes', 'ct', 'ct.id = c.cartao_id')
+      .getRawMany();
   }
-
   private async salvarCompra(createCompra: CreateCompra) {
     const saveCompra = await this.createCompraToSave(createCompra);
     return await this.compraRepository.save(saveCompra);

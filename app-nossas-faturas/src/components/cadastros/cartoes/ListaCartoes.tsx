@@ -1,13 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "../../ui/badge";
 import ListaCadastros from "../../shared/Cadastros/ListaCadastros";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import DialogCadastroAndEdit from "@/components/shared/Cadastros/DialogCadastro";
+
 import AlertDelete from "@/components/shared/global/AlertDelete";
 import { formatoMoeda } from "@/utils/masks/ValueMask";
 import { useMutatationCartoes } from "@/Hooks/CartaoHooks";
@@ -23,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { EyeIcon } from "lucide-react";
+import DialogFormsCadastro from "@/components/shared/Cadastros/DialogFormsCadastro";
 
 interface cartoesProps {
   data?: CartaoPaginated;
@@ -117,13 +112,13 @@ const ListaCartoes = ({
               </div>
             </div>
             <div className="flex gap-4 flex-row-reverse md:flex-row align-top">
-              <DialogCadastroAndEdit
+              <DialogFormsCadastro
                 urlQuery={urlQuery}
                 className="flex  "
                 componentOpen={3}
                 title="Editar Cartão"
                 cartao={cartao}
-              ></DialogCadastroAndEdit>
+              ></DialogFormsCadastro>
 
               <AlertDelete
                 descricao={`o Cartao ${cartao.nome}`}

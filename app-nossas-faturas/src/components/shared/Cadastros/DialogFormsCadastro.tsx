@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/dialog";
 import { PlusIcon } from "@radix-ui/react-icons";
 import React from "react";
-import CadastroLoja from "../../cadastros/lojas/CadastroLoja";
-import CadastroPessoa from "../../cadastros/pessoas/CadastroPessoa";
-import CadastroCartoes from "../../cadastros/cartoes/CadastroCartoes";
 
 import { Pencil } from "lucide-react";
-type DialogCadastroProps = {
+import FormCartoes from "../../cadastros/cartoes/FormCartoes";
+import FormLoja from "../../cadastros/lojas/FormLoja";
+import FormPessoa from "../../cadastros/pessoas/FormPessoa";
+type DialogFormsCadastroProps = {
   className?: string;
   componentOpen: number;
   title: string;
@@ -23,7 +23,7 @@ type DialogCadastroProps = {
   urlQuery: string;
 };
 
-const DialogCadastroAndEdit = ({
+const DialogFormsCadastro = ({
   className,
   componentOpen,
   title,
@@ -31,7 +31,7 @@ const DialogCadastroAndEdit = ({
   pessoa,
   cartao,
   urlQuery,
-}: DialogCadastroProps) => {
+}: DialogFormsCadastroProps) => {
   const [open, setOpen] = React.useState(false);
   const existeData = loja || pessoa || cartao ? true : false;
   return (
@@ -68,21 +68,17 @@ const DialogCadastroAndEdit = ({
             <DialogDescription></DialogDescription>
           </DialogHeader>
           {componentOpen === 1 && (
-            <CadastroLoja
-              closedDialog={setOpen}
-              loja={loja}
-              urlQuery={urlQuery}
-            />
+            <FormLoja closedDialog={setOpen} loja={loja} urlQuery={urlQuery} />
           )}
           {componentOpen === 2 && (
-            <CadastroPessoa
+            <FormPessoa
               closedDialog={setOpen}
               pessoa={pessoa}
               urlQuery={urlQuery}
             />
           )}
           {componentOpen === 3 && (
-            <CadastroCartoes
+            <FormCartoes
               closedDialog={setOpen}
               urlQuery={urlQuery}
               cartao={cartao}
@@ -94,4 +90,4 @@ const DialogCadastroAndEdit = ({
   );
 };
 
-export default DialogCadastroAndEdit;
+export default DialogFormsCadastro;

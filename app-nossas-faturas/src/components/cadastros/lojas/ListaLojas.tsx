@@ -1,12 +1,11 @@
 import ListaCadastros from "../../shared/Cadastros/ListaCadastros";
 import PaginationShared from "../../shared/global/PaginationShared";
 
-import DialogCadastroAndEdit from "../../shared/Cadastros/DialogCadastro";
-
 import AlertDelete from "@/components/shared/global/AlertDelete";
 import { useMutationLojaHook } from "@/Hooks/LojaHooks";
 import { deleteLojaApi } from "@/api/lojaApi";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
+import DialogFormsCadastro from "../../shared/Cadastros/DialogFormsCadastro";
 
 interface LojasProps {
   data?: LojaPaginated;
@@ -43,13 +42,13 @@ const ListaLojas = ({
             <div className="flex justify-between">
               <h3 className="text-2xl">{loja.nome}</h3>
               <div className="flex gap-4 flex-row-reverse md:flex-row align-top">
-                <DialogCadastroAndEdit
+                <DialogFormsCadastro
                   urlQuery={urlQuery}
                   className="flex  "
                   componentOpen={1}
                   title="Editar Loja"
                   loja={loja}
-                ></DialogCadastroAndEdit>
+                ></DialogFormsCadastro>
 
                 <AlertDelete
                   descricao={`a loja ${loja.nome}`}

@@ -3,7 +3,7 @@ import { BackpackIcon, FileText, HomeIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ItensNavegacaoProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
@@ -20,14 +20,23 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
             </div>
           </li>
           <li className="flex w-full justify-start">
-            <div>
-              <BackpackIcon />
-            </div>
+            <Link
+              to={"compras"}
+              className="flex justify-between"
+              onClick={() => {
+                if (setOpen) setOpen(!open);
+              }}
+            >
+              <div>
+                <BackpackIcon />
+              </div>
 
-            <div className="pl-3 ">
-              <span> Compras</span>
-            </div>
+              <div className="pl-3 ">
+                <span> Compras</span>
+              </div>
+            </Link>
           </li>
+
           <li className="flex w-full justify-start">
             <div>
               <FileText />
@@ -41,7 +50,9 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
             <Link
               to={"cadastro"}
               className="flex justify-between"
-              onClick={() => setOpen(!open)}
+              onClick={() => {
+                if (setOpen) setOpen(!open);
+              }}
             >
               <div>
                 <IdCardIcon height={24} width={24} />

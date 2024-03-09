@@ -1,50 +1,51 @@
+import Input from "../../shared/global/Input";
 import Label from "../../shared/global/Label";
 import { Controller, useForm } from "react-hook-form";
 import ErrosInputs from "../../shared/global/ErrosInputs";
-import Input from "../../shared/global/Input";
-
-import { useMutationLojaHook } from "@/Hooks/LojaHooks";
-import { createLojaApi, updateLojaApi } from "@/api/lojaApi";
+import { useMutationPessoaHook } from "@/Hooks/PessoaHooks";
+import { createPessoaApi, updatePessoaApi } from "@/api/PessoaApi";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
 
-type CadastroLojaProps = {
+type CadastroPessoaProps = {
   closedDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  loja?: Loja;
   urlQuery: string;
+  pessoa?: Pessoa;
 };
 
-const CadastroLoja = ({ closedDialog, loja, urlQuery }: CadastroLojaProps) => {
+const FormPessoa = ({
+  closedDialog,
+  pessoa,
+  urlQuery,
+}: CadastroPessoaProps) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInputsLoja>({
+  } = useForm<IFormInputsPessoa>({
     defaultValues: {
-      id: loja?.id || 0,
-      nome: loja?.nome || "",
+      id: pessoa?.id || 0,
+      nome: pessoa?.nome || "",
     },
   });
-
-  const mutation = useMutationLojaHook(
+  const mutation = useMutationPessoaHook(
     urlQuery,
-    loja ? updateLojaApi : createLojaApi,
-    loja ? EAcaoMutationHooks.EDITAR : EAcaoMutationHooks.CADASTRAR
+    pessoa ? updatePessoaApi : createPessoaApi,
+    pessoa ? EAcaoMutationHooks.EDITAR : EAcaoMutationHooks.CADASTRAR
   );
-
-  const onSubmit = (data: IFormInputsLoja) => {
+  const onSubmit = (data: IFormInputsPessoa) => {
     mutation.mutate(data);
     closedDialog(false);
   };
 
   return (
-    <section className="flex flex-col gap-1">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
-        <Label title="Nome" />
+    <section>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1 ">
+        <Label title="Nome" htmlFor="pessoa" />
         <Controller
           name="nome"
           control={control}
           rules={{ required: true }}
-          render={({ field }) => <Input type="text" id="loja" {...field} />}
+          render={({ field }) => <Input type="text" id="pessoa" {...field} />}
         />
         {errors.nome && <ErrosInputs title="O campo nome é obrigatório" />}
         <div className="flex justify-center pt-5">
@@ -60,4 +61,4 @@ const CadastroLoja = ({ closedDialog, loja, urlQuery }: CadastroLojaProps) => {
   );
 };
 
-export default CadastroLoja;
+export default FormPessoa;

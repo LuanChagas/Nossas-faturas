@@ -14,7 +14,7 @@ type CadastroCartoesProps = {
   urlQuery: string;
 };
 
-const CadastroCartoes = ({
+const FormCartoes = ({
   closedDialog,
   cartao,
   urlQuery,
@@ -201,4 +201,4 @@ const CadastroCartoes = ({
   );
 };
 
-export default CadastroCartoes;
+export default FormCartoes;

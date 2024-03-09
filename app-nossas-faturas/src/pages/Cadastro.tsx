@@ -5,7 +5,7 @@ import ListaCartoes from "../components/cadastros/cartoes/ListaCartoes";
 import ListaLojas from "../components/cadastros/lojas/ListaLojas";
 import React from "react";
 import ListaPessoas from "../components/cadastros/pessoas/ListaPessoas";
-import DialogCadastroAndEdit from "../components/shared/Cadastros/DialogCadastro";
+
 import { useQueryPessoaHook } from "@/Hooks/PessoaHooks";
 import { getPessoasApi } from "@/api/PessoaApi";
 import { getLojasApi } from "@/api/lojaApi";
@@ -13,6 +13,7 @@ import { useQueryLojaHook } from "@/Hooks/LojaHooks";
 
 import { useQueryCartao } from "@/Hooks/CartaoHooks";
 import { getCartoesApi } from "@/api/CartaoApi";
+import DialogFormsCadastro from "../components/shared/Cadastros/DialogFormsCadastro";
 
 const Cadastros = () => {
   const [componentOpen, setComponentOpen] = React.useState<number>(1);
@@ -54,12 +55,12 @@ const Cadastros = () => {
     <>
       <TituloConteudoMain title="Cadastro" />
       <section className="w-full flex flex-col justify-between sm:pt-5 align-middle">
-        <DialogCadastroAndEdit
+        <DialogFormsCadastro
           urlQuery={urlQuery}
           className="flex self-end pb-4 md:pb-0"
           componentOpen={componentOpen}
           title={title}
-        ></DialogCadastroAndEdit>
+        ></DialogFormsCadastro>
         <Tabs defaultValue="lojas" className="w-full ">
           <TabsList className="md:w-[400px] w-full">
             <TabsTrigger

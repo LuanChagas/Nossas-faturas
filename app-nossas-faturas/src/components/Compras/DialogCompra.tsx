@@ -8,14 +8,22 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { useState } from "react";
+import FormCompra from "./FormCompra";
+import { title } from "process";
 
 type DialogCompraProps = {
   className?: string;
   urlQuery?: string;
   compra?: Compra;
+  title: string;
 };
 
-const DialogCompra = ({ className, urlQuery, compra }: DialogCompraProps) => {
+const DialogCompra = ({
+  className,
+  urlQuery,
+  compra,
+  title,
+}: DialogCompraProps) => {
   const [open, setOpen] = useState(false);
   const existeData = compra ? true : false;
   return (
@@ -25,19 +33,14 @@ const DialogCompra = ({ className, urlQuery, compra }: DialogCompraProps) => {
           <div className="flex ">
             {existeData && (
               <Pencil
-                width={30}
-                height={30}
+                width={23}
+                height={23}
                 strokeWidth={2}
-                className="bg-gray-200  rounded-full hover:bg-slate-50 border-2 shadow-md"
+                className=""
               ></Pencil>
             )}
             {!existeData && (
-              <PlusIcon
-                width={32}
-                height={32}
-                strokeWidth={1}
-                className="bg-gray-200  rounded-full hover:bg-slate-50 border-2 shadow-md"
-              />
+              <PlusIcon width={32} height={32} strokeWidth={1} className="" />
             )}
           </div>
         </DialogTrigger>
@@ -46,9 +49,12 @@ const DialogCompra = ({ className, urlQuery, compra }: DialogCompraProps) => {
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <DialogHeader>
-            <DialogTitle className="text-gray-700 text-2xl"></DialogTitle>
+            <DialogTitle className="text-gray-700 text-2xl">
+              {title} Compra
+            </DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
+          <FormCompra></FormCompra>
         </DialogContent>
       </Dialog>
     </section>

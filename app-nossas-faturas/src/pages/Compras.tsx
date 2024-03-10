@@ -15,7 +15,7 @@ const Compras = () => {
     <>
       <section className="header-compras flex flex-col justify-between">
         <TituloConteudoMain title="Compras" />
-        <DialogCompra className=" self-end"></DialogCompra>
+        <DialogCompra className=" self-end" title="Cadastrar"></DialogCompra>
       </section>
 
       <section className="sm:pt-8 pt-5 w-full  ">
@@ -32,7 +32,7 @@ const Compras = () => {
                       </Avatar>
                     </div>
                     <div className="informacoes">
-                      <h3 className="text-lg">{compra.pessoa}</h3>
+                      <h3 className="text-lg">{compra.pessoa.nome}</h3>
                       <div className="text-xs">
                         <h4>{compra.descricao}</h4>
                         <h4>
@@ -47,6 +47,7 @@ const Compras = () => {
                   <div className="secao-direita flex gap-3 items-center">
                     <h2 className="text-red-600">R$ {compra.valor} </h2>
                     <DialogCompra
+                      title="Editar"
                       className="  self-end"
                       compra={compra}
                     ></DialogCompra>

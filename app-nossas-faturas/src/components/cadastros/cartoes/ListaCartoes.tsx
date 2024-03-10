@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EyeIcon } from "lucide-react";
 import DialogFormsCadastro from "@/components/shared/Cadastros/DialogFormsCadastro";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 interface cartoesProps {
   data?: CartaoPaginated;
@@ -60,10 +61,14 @@ const ListaCartoes = ({
                 </Avatar>
                 <div className="flex  gap-5 ">
                   <h3 className="text-2xl">{cartao.nome}</h3>
-
                   <DropdownMenu>
                     <DropdownMenuTrigger>
-                      <EyeIcon strokeWidth={1}></EyeIcon>
+                      <DotsHorizontalIcon
+                        width={20}
+                        height={20}
+                        strokeWidth={1}
+                        className="bg-gray-200  rounded-full hover:bg-slate-50 border-2 shadow-md"
+                      ></DotsHorizontalIcon>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuLabel>Infos</DropdownMenuLabel>

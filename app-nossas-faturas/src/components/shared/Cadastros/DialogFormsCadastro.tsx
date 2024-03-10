@@ -40,21 +40,9 @@ const DialogFormsCadastro = ({
         <DialogTrigger>
           <div className="flex ">
             {existeData && (
-              <Pencil
-                width={30}
-                height={30}
-                strokeWidth={2}
-                className="bg-gray-200  rounded-full hover:bg-slate-50 border-2 shadow-md"
-              ></Pencil>
+              <Pencil width={25} height={25} strokeWidth={2}></Pencil>
             )}
-            {!existeData && (
-              <PlusIcon
-                width={32}
-                height={32}
-                strokeWidth={1}
-                className="bg-gray-200  rounded-full hover:bg-slate-50 border-2 shadow-md"
-              />
-            )}
+            {!existeData && <PlusIcon width={32} height={32} strokeWidth={1} />}
           </div>
         </DialogTrigger>
         <DialogContent

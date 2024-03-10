@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CompraService } from './compra.service';
 import { CreateCompra } from './compra.validation';
 
@@ -10,6 +17,7 @@ export class CompraController {
     return await this.compraService.getCompras();
   }
   @Post()
+  @UsePipes(ValidationPipe)
   async criarCompra(@Body() createCompra: CreateCompra) {
     const compra = await this.compraService.criarCompra(createCompra);
     return {

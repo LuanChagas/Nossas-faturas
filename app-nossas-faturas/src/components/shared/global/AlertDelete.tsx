@@ -26,7 +26,8 @@ const AlertDelete = ({ descricao, onConfirm }: AlertDeleteProps) => {
             width={30}
             height={30}
             strokeWidth={1}
-            className="bg-red-300  rounded-full hover:bg-red-200 border-2 shadow-md"
+            color="#b91c1c"
+            fill="#fef2f2"
           ></Trash>
         </AlertDialogTrigger>
         <AlertDialogContent>

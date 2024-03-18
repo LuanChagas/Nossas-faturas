@@ -9,21 +9,14 @@ import {
 } from "../ui/dialog";
 import { useState } from "react";
 import FormCompra from "./FormCompra";
-import { title } from "process";
 
 type DialogCompraProps = {
   className?: string;
-  urlQuery?: string;
   compra?: Compra;
   title: string;
 };
 
-const DialogCompra = ({
-  className,
-  urlQuery,
-  compra,
-  title,
-}: DialogCompraProps) => {
+const DialogCompra = ({ className, compra, title }: DialogCompraProps) => {
   const [open, setOpen] = useState(false);
   const existeData = compra ? true : false;
   return (
@@ -54,7 +47,7 @@ const DialogCompra = ({
             </DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <FormCompra></FormCompra>
+          <FormCompra compra={compra} closedDialog={setOpen}></FormCompra>
         </DialogContent>
       </Dialog>
     </section>

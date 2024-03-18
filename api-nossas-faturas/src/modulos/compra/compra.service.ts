@@ -12,6 +12,8 @@ import { Cartao } from '../cartao/cartao.entity';
 import { FaturaCompra } from '../fatura-compra/fatura-compra.entity';
 import { FaturaCompraService } from '../fatura-compra/fatura-compra.service';
 import { Pessoa } from '../pessoa/pessoa.entity';
+import { Loja } from '../loja/loja.entity';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class CompraService {
@@ -40,23 +42,22 @@ export class CompraService {
     return compra;
   }
 
-  async getCompras() {
-    return await this.compraRepository
+  async getCompras(options: IPaginationOptions) {
+    const queryCompra = this.compraRepository
       .createQueryBuilder('c')
       .select([
-        'c.id as id',
-        'p.nome as pessoa',
-        'c.descricao as descricao',
-        'l.nome as loja',
-        'ct.nome as cartao',
-        'c.data_compra as data',
-        'c.valor as valor',
-        'c.parcelas as parcelas',
+        'c.id',
+        'c.data_compra',
+        'c.descricao',
+        'c.valor',
+        'c.parcelas',
+        'c.status',
       ])
-      .innerJoin('pessoas', 'p', 'p.id = c.pessoa_id')
-      .innerJoin('lojas', 'l', 'l.id = c.loja_id')
-      .innerJoin('cartoes', 'ct', 'ct.id = c.cartao_id')
-      .getRawMany();
+      .innerJoinAndSelect('c.pessoa', 'p', 'c.pessoa_id = p.id')
+      .innerJoinAndSelect('c.loja', 'l', 'c.loja_id = l.id')
+      .innerJoinAndSelect('c.cartao', 'ca', 'c.cartao_id = ca.id')
+      .orderBy('c.id', 'DESC');
+    return paginate<Compra>(queryCompra, options);
   }
   private async salvarCompra(createCompra: CreateCompra) {
     const saveCompra = await this.createCompraToSave(createCompra);

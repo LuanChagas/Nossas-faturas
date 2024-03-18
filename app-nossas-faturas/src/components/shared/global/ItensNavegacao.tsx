@@ -19,6 +19,16 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
               <span>DashBoard</span>
             </div>
           </li>
+
+          <li className="flex w-full justify-start">
+            <div>
+              <FileText />
+            </div>
+
+            <div className="pl-3 w-full">
+              <span>Relatórios</span>
+            </div>
+          </li>
           <li className="flex w-full justify-start">
             <Link
               to={"compras"}
@@ -35,16 +45,6 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
                 <span> Compras</span>
               </div>
             </Link>
-          </li>
-
-          <li className="flex w-full justify-start">
-            <div>
-              <FileText />
-            </div>
-
-            <div className="pl-3 w-full">
-              <span>Relatórios</span>
-            </div>
           </li>
           <li className="flex w-full justify-start">
             <Link

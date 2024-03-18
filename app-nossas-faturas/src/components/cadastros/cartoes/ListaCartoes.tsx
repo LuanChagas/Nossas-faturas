@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "../../ui/badge";
 import ListaCadastros from "../../shared/Cadastros/ListaCadastros";
 
 import AlertDelete from "@/components/shared/global/AlertDelete";
@@ -16,7 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EyeIcon } from "lucide-react";
 import DialogFormsCadastro from "@/components/shared/Cadastros/DialogFormsCadastro";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
@@ -67,50 +65,28 @@ const ListaCartoes = ({
                         width={20}
                         height={20}
                         strokeWidth={1}
-                        className="bg-gray-200  rounded-full hover:bg-slate-50 border-2 shadow-md"
+                        className=""
                       ></DotsHorizontalIcon>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuLabel>Infos</DropdownMenuLabel>
+                      <DropdownMenuLabel>Informações</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <div className="flex flex-col flex-wrap">
-                        <DropdownMenuItem>
-                          <Badge variant="outline" className="text-[11px]">
-                            PIX: {cartao.pix}
-                          </Badge>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Badge variant="outline" className="text-[11px]">
-                            Fechamento: {cartao.dia_fechamento}
-                          </Badge>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Badge variant="outline" className="text-[11px]">
-                            Fechamento: {cartao.dia_fechamento}
-                          </Badge>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Badge variant="outline" className="text-[11px]">
-                            Vencimento: {cartao.dia_vencimento}
-                          </Badge>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Badge variant="outline" className="text-[11px]">
-                            Limite Total: {formatoMoeda(cartao.limite_total)}
-                          </Badge>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Badge variant="outline" className="text-[11px]">
-                            Limite Total: {formatoMoeda(cartao.limite_total)}
-                          </Badge>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Badge variant="outline" className="text-[11px]">
-                            Limite parcial:
-                            {formatoMoeda(cartao.limite_disponivel)}
-                          </Badge>
-                        </DropdownMenuItem>
-                      </div>
+                      <DropdownMenuItem className="flex flex-col items-start">
+                        <span className="text-[12px]">PIX: {cartao.pix}</span>
+                        <span className="text-[12px]">
+                          Fechamento: {cartao.dia_fechamento}
+                        </span>
+                        <span className="text-[12px]">
+                          Vencimento: {cartao.dia_vencimento}
+                        </span>
+                        <span className="text-[12px]">
+                          Limite Total: {formatoMoeda(cartao.limite_total)}
+                        </span>
+                        <span className="text-[12px]">
+                          Limite parcial:
+                          {formatoMoeda(cartao.limite_disponivel)}
+                        </span>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

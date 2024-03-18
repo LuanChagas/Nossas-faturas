@@ -1,14 +1,18 @@
+import { useGetUrlQuery } from "@/Hooks/CompraHooks";
 import { getCompras } from "@/api/Compra";
 import DialogCompra from "@/components/Compras/DialogCompra";
+import PaginationShared from "@/components/shared/global/PaginationShared";
 import TituloConteudoMain from "@/components/shared/global/TituloConteudoMain";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 
 const Compras = () => {
+  const urlQuery = useGetUrlQuery();
   const { data } = useQuery({
-    queryKey: ["getCompras"],
-    queryFn: () => {
-      return getCompras("compras").then((result) => result.data);
+    queryKey: ["getCompras", urlQuery],
+    queryFn: async () => {
+      console.log(await getCompras(urlQuery).then((result) => result.data));
+      return getCompras(urlQuery).then((result) => result.data);
     },
   });
   return (
@@ -19,9 +23,9 @@ const Compras = () => {
       </section>
 
       <section className="sm:pt-8 pt-5 w-full  ">
-        <ul className="w-full flex flex-col gap-3 overflow-y-auto">
-          {data &&
-            data.map((compra) => (
+        <ul className="w-full flex flex-col gap-3  overflow-y-auto">
+          {data?.items &&
+            data.items.map((compra) => (
               <li className="flex flex-col gap-2" key={compra.id}>
                 <div className="flex justify-between items-center">
                   <div className="secao-esquerda flex gap-2">
@@ -38,7 +42,7 @@ const Compras = () => {
                         <h4>
                           Data da compra:
                           <span className="font-semibold">
-                            {compra.data.toString()}
+                            {compra.data_compra.toString()}
                           </span>
                         </h4>
                       </div>
@@ -57,6 +61,13 @@ const Compras = () => {
               </li>
             ))}
         </ul>
+        {data?.links && data.meta && (
+          <PaginationShared
+            meta={data.meta}
+            links={data.links}
+            baseUrl="compras"
+          />
+        )}
       </section>
     </>
   );

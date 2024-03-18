@@ -6,12 +6,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+
 import { useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 type PaginationSharedProps = {
   meta: MetaPaginated;
   links: LinksPaginated;
   baseUrl: string;
-  setUrlQuery: React.Dispatch<React.SetStateAction<string>>;
+  setUrlQuery?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const PaginationShared = ({
@@ -20,7 +22,6 @@ const PaginationShared = ({
   baseUrl,
   setUrlQuery,
 }: PaginationSharedProps) => {
-  //const { setUrlQuery } = useContext(UrlContext);
   const limit = `limit=10`;
   const pageActive = meta.currentPage;
 
@@ -32,11 +33,15 @@ const PaginationShared = ({
     if (links.next === "") return [pageActive - 2, pageActive - 1, pageActive];
     return [pageActive - 1, pageActive, pageActive + 1];
   };
-
+  const navigate = useNavigate();
   const changePage = useCallback(
     (url: string) => {
       console.log(url);
-      setUrlQuery(url);
+      if (setUrlQuery) setUrlQuery(url);
+      if (!setUrlQuery) {
+        const newUrl = url.split("compras")[1];
+        navigate(newUrl);
+      }
       //queryClient.invalidateQueries({ queryKey: ["getLojas"] });
     },
     [setUrlQuery]

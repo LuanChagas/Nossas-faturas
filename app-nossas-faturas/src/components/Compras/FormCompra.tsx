@@ -13,37 +13,53 @@ import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { ptBR } from "date-fns/locale";
+import { createCompraApi } from "@/api/Compra";
+import { removeMoeda } from "@/utils/masks/RemoveMask";
+import { useGetUrlQuery, useMutatationCompra } from "@/Hooks/CompraHooks";
+import { EAcaoMutationHooks } from "@/types/HooksCustom";
 
 interface FormCompraProps {
+  closedDialog: React.Dispatch<React.SetStateAction<boolean>>;
+
   compra?: Compra;
 }
 
-const FormCompra = ({ compra }: FormCompraProps) => {
-  const [date, setDate] = useState<Date>();
+const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
+  const urlQuery = useGetUrlQuery();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputCompra>({
     defaultValues: {
-      id: compra?.id || 0,
+      id: compra?.id || undefined,
       descricao: compra?.descricao || "",
       valor: compra?.valor ? formatoMoeda(Number(compra?.valor)) : "R$ 0,00",
       parcelas: compra?.parcelas || 1,
-      data: compra?.data || new Date(),
-      cartao: compra?.cartao.id || undefined,
-      loja: compra?.loja.id || undefined,
-      pessoa: compra?.pessoa.id || undefined,
+      status: compra?.status || 1,
+      data_compra: compra?.data_compra || new Date(),
+      cartao_id: compra?.cartao.id || undefined,
+      loja_id: compra?.loja.id || undefined,
+      pessoa_id: compra?.pessoa.id || undefined,
     },
   });
 
-  function onSubmit(data: IFormInputCompra) {}
+  const mutationCompra = useMutatationCompra(
+    urlQuery,
+    compra ? createCompraApi : createCompraApi,
+    EAcaoMutationHooks.CADASTRAR
+  );
+
+  function onSubmit(data: IFormInputCompra) {
+    mutationCompra.mutate({ ...data, valor: removeMoeda(data.valor) });
+    closedDialog(false);
+  }
   return (
     <section className="h-[70vh] sm:h-full overflow-auto">
+      {errors.descricao && <span>Descrição é obrigatória</span>}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
         <Label title="Descrição" htmlFor="descricao"></Label>
         <Controller
@@ -81,7 +97,7 @@ const FormCompra = ({ compra }: FormCompraProps) => {
                 field.onChange(Number(e));
               }}
             >
-              <SelectTrigger className="w-20 border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700 ">
+              <SelectTrigger className="w-80 border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700 ">
                 <SelectValue placeholder="Selecione a quantidade de parcelas" />
               </SelectTrigger>
               <SelectContent className="">
@@ -92,9 +108,9 @@ const FormCompra = ({ compra }: FormCompraProps) => {
             </Select>
           )}
         />
-        <Label title="Data da compra" htmlFor="data"></Label>
+        <Label title="Data da compra" htmlFor="data_compra"></Label>
         <Controller
-          name="data"
+          name="data_compra"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
@@ -104,7 +120,7 @@ const FormCompra = ({ compra }: FormCompraProps) => {
                   variant={"outline"}
                   className={cn(
                     "w-[240px] justify-start text-left font-normal border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700",
-                    !date && "text-muted-foreground"
+                    !field.value && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -129,9 +145,9 @@ const FormCompra = ({ compra }: FormCompraProps) => {
             </Popover>
           )}
         />
-        <Label title="Cartão" htmlFor="cartao"></Label>
+        <Label title="Cartão" htmlFor="cartao_id"></Label>
         <Controller
-          name="cartao"
+          name="cartao_id"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
@@ -139,6 +155,7 @@ const FormCompra = ({ compra }: FormCompraProps) => {
               onValueChange={(e) => {
                 field.onChange(Number(e));
               }}
+              name="cartao_id"
             >
               <SelectTrigger className="w-[180px] border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700 ">
                 <SelectValue placeholder="Selecione o cartão" />
@@ -154,7 +171,7 @@ const FormCompra = ({ compra }: FormCompraProps) => {
 
         <Label title="Loja" htmlFor="loja"></Label>
         <Controller
-          name="loja"
+          name="loja_id"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
@@ -176,7 +193,7 @@ const FormCompra = ({ compra }: FormCompraProps) => {
         />
         <Label title="Pessoa" htmlFor="pessoa"></Label>
         <Controller
-          name="pessoa"
+          name="pessoa_id"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
@@ -189,9 +206,9 @@ const FormCompra = ({ compra }: FormCompraProps) => {
                 <SelectValue placeholder="Selecione a pessoa" />
               </SelectTrigger>
               <SelectContent className="">
-                <SelectItem value="1">pessoa 1</SelectItem>
-                <SelectItem value="2">pessoa 2</SelectItem>
-                <SelectItem value="3">pessoa 3</SelectItem>
+                <SelectItem value="49">pessoa 1</SelectItem>
+                <SelectItem value="51">pessoa 2</SelectItem>
+                <SelectItem value="52">pessoa 3</SelectItem>
               </SelectContent>
             </Select>
           )}

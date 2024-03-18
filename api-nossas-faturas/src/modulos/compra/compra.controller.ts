@@ -1,8 +1,11 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Get,
+  ParseIntPipe,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -13,8 +16,17 @@ import { CreateCompra } from './compra.validation';
 export class CompraController {
   constructor(private compraService: CompraService) {}
   @Get('compras')
-  async getCompras() {
-    return await this.compraService.getCompras();
+  async getCompras(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+  ) {
+    limit = limit > 100 ? 100 : limit;
+
+    return await this.compraService.getCompras({
+      page,
+      limit,
+      route: 'compras',
+    });
   }
   @Post()
   @UsePipes(ValidationPipe)

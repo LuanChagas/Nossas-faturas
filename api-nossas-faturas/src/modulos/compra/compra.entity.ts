@@ -17,20 +17,20 @@ export class Compra {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'date' })
   data_compra: Date;
 
   @Column()
   descricao: string;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   valor: number;
 
   @Column()
   parcelas: number;
 
   @Column()
-  status: string;
+  status: number;
 
   @ManyToOne(() => Pessoa, (pessoa) => pessoa.compras)
   @JoinColumn({ name: 'pessoa_id' })

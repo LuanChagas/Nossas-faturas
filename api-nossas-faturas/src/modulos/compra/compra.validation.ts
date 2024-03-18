@@ -17,8 +17,8 @@ export class CompraValidation {
   @IsNumber({}, { message: 'O id da pessoa deve ser um número' })
   pessoa_id: number;
 
-  @IsString({ message: 'O status deve ser uma string' })
-  status: string;
+  @IsNumber({}, { message: 'O status deve ser um número' })
+  status: number;
 
   @IsNumber({}, { message: 'O número de parcelas deve ser um número' })
   parcelas: number;

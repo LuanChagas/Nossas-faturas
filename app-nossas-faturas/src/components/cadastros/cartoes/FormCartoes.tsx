@@ -47,13 +47,7 @@ const FormCartoes = ({
 
   const onSubmit = (data: IFormInputsCartao) => {
     removeMoeda(data.limiteDisponivel);
-    console.log({
-      dia_fechamento: data.fechamento,
-      dia_vencimento: data.vencimento,
-      limite_disponivel: removeMoeda(data.limiteDisponivel),
-      limite_total: removeMoeda(data.limiteTotal),
-      ...data,
-    });
+
     mutation.mutate({
       dia_fechamento: data.fechamento,
       dia_vencimento: data.vencimento,

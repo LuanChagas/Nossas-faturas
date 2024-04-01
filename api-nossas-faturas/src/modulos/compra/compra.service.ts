@@ -12,7 +12,7 @@ import { Cartao } from '../cartao/cartao.entity';
 import { FaturaCompra } from '../fatura-compra/fatura-compra.entity';
 import { FaturaCompraService } from '../fatura-compra/fatura-compra.service';
 import { Pessoa } from '../pessoa/pessoa.entity';
-import { Loja } from '../loja/loja.entity';
+
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
@@ -40,6 +40,18 @@ export class CompraService {
     );
     await this.processarFaturaCompra(faturasProcessadas, compra);
     return compra;
+  }
+
+  async editarCompra(compraEdit: CreateCompra) {
+    const compra = await this.compraRepository.findOne({
+      where: { id: compraEdit.id },
+      relations: ['pessoa', 'loja'],
+    });
+    compra.descricao = compraEdit.descricao;
+    compra.loja.id = compraEdit.loja_id;
+    compra.pessoa.id = compraEdit.pessoa_id;
+
+    return await this.compraRepository.save(compra);
   }
 
   async getCompras(options: IPaginationOptions) {

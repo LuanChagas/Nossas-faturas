@@ -16,40 +16,50 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { ptBR } from "date-fns/locale";
-import { createCompraApi } from "@/api/Compra";
+import { createCompraApi, updateCompraApi } from "@/api/Compra";
 import { removeMoeda } from "@/utils/masks/RemoveMask";
-import { useGetUrlQuery, useMutatationCompra } from "@/Hooks/CompraHooks";
+import {
+  useGetUrlQuery,
+  useMutatationCompra,
+  useQueryDataSelect,
+} from "@/Hooks/CompraHooks";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
+import React from "react";
+import ErrosInputs from "../shared/global/ErrosInputs";
 
 interface FormCompraProps {
   closedDialog: React.Dispatch<React.SetStateAction<boolean>>;
-
   compra?: Compra;
 }
 
 const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
   const urlQuery = useGetUrlQuery();
+
+  const defaultValues = {
+    id: compra?.id || undefined,
+    descricao: compra?.descricao || "",
+    valor: compra?.valor ? formatoMoeda(Number(compra?.valor)) : "R$ 0,00",
+    parcelas: compra?.parcelas || 1,
+    status: compra?.status || 1,
+    data_compra: compra?.data_compra
+      ? new Date(compra.data_compra + "T00:00:00")
+      : new Date(),
+    cartao_id: compra?.cartao.id || undefined,
+    loja_id: compra?.loja.id || undefined,
+    pessoa_id: compra?.pessoa.id || undefined,
+  };
+
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputCompra>({
-    defaultValues: {
-      id: compra?.id || undefined,
-      descricao: compra?.descricao || "",
-      valor: compra?.valor ? formatoMoeda(Number(compra?.valor)) : "R$ 0,00",
-      parcelas: compra?.parcelas || 1,
-      status: compra?.status || 1,
-      data_compra: compra?.data_compra || new Date(),
-      cartao_id: compra?.cartao.id || undefined,
-      loja_id: compra?.loja.id || undefined,
-      pessoa_id: compra?.pessoa.id || undefined,
-    },
+    defaultValues,
   });
 
   const mutationCompra = useMutatationCompra(
     urlQuery,
-    compra ? createCompraApi : createCompraApi,
+    compra ? updateCompraApi : createCompraApi,
     EAcaoMutationHooks.CADASTRAR
   );
 
@@ -57,9 +67,25 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
     mutationCompra.mutate({ ...data, valor: removeMoeda(data.valor) });
     closedDialog(false);
   }
+
+  const { data, isLoading, isError } = useQueryDataSelect();
+
+  if (isError) return <span>Ocorreu um erro ao carregar os dados</span>;
+  if (isLoading) return <span>Carregando...</span>;
   return (
     <section className="h-[70vh] sm:h-full overflow-auto">
-      {errors.descricao && <span>Descrição é obrigatória</span>}
+      <section>
+        {errors.descricao && <ErrosInputs title="Nome é obrigatório" />}
+        {errors.valor && <ErrosInputs title="Valor é obrigatório" />}
+        {errors.parcelas && <ErrosInputs title="Parcelas é obrigatório" />}
+        {errors.data_compra && (
+          <ErrosInputs title="Data da compra é obrigatório" />
+        )}
+        {errors.cartao_id && <ErrosInputs title="Cartão é obrigatório" />}
+        {errors.loja_id && <ErrosInputs title="Loja é obrigatório" />}
+        {errors.pessoa_id && <ErrosInputs title="Pessoa é obrigatório" />}
+      </section>
+
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
         <Label title="Descrição" htmlFor="descricao"></Label>
         <Controller
@@ -77,7 +103,10 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
           rules={{ required: true }}
           render={({ field }) => (
             <Input
-              className="w-32"
+              readOnly={compra ? true : false}
+              disabled={compra ? true : false}
+              className="w-32 
+                disabled:text-muted-foreground disabled:opacity-50"
               type="text"
               id="valor"
               mask="MoedaBR"
@@ -96,14 +125,18 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
               onValueChange={(e) => {
                 field.onChange(Number(e));
               }}
+              defaultValue={field.value ? field.value.toString() : ""}
+              disabled={compra ? true : false}
             >
               <SelectTrigger className="w-80 border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700 ">
                 <SelectValue placeholder="Selecione a quantidade de parcelas" />
               </SelectTrigger>
               <SelectContent className="">
-                <SelectItem value="1">1</SelectItem>
-                <SelectItem value="2">2</SelectItem>
-                <SelectItem value="3">3</SelectItem>
+                {Array.from({ length: 24 }, (_, i) => i + 1).map((item) => (
+                  <SelectItem key={item} value={item.toString()}>
+                    {item} <span>parcela(s)</span>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           )}
@@ -117,6 +150,7 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
             <Popover>
               <PopoverTrigger asChild>
                 <Button
+                  disabled={compra ? true : false}
                   variant={"outline"}
                   className={cn(
                     "w-[240px] justify-start text-left font-normal border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700",
@@ -152,18 +186,23 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
           rules={{ required: true }}
           render={({ field }) => (
             <Select
+              disabled={compra ? true : false}
               onValueChange={(e) => {
                 field.onChange(Number(e));
               }}
               name="cartao_id"
+              defaultValue={field.value ? field.value.toString() : ""}
             >
               <SelectTrigger className="w-[180px] border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700 ">
                 <SelectValue placeholder="Selecione o cartão" />
               </SelectTrigger>
               <SelectContent className="">
-                <SelectItem value="1">cartao 1</SelectItem>
-                <SelectItem value="2">cartao 2</SelectItem>
-                <SelectItem value="3">cartao 3</SelectItem>
+                {data?.cartoes &&
+                  data?.cartoes.map((cartao) => (
+                    <SelectItem key={cartao.id} value={cartao.id!.toString()}>
+                      {cartao.nome}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           )}
@@ -179,14 +218,18 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
               onValueChange={(e) => {
                 field.onChange(Number(e));
               }}
+              defaultValue={field.value ? field.value.toString() : ""}
             >
               <SelectTrigger className="w-[180px] border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700 ">
                 <SelectValue placeholder="Selecione a loja" />
               </SelectTrigger>
               <SelectContent className="">
-                <SelectItem value="1">Loja 1</SelectItem>
-                <SelectItem value="2">Loja 2</SelectItem>
-                <SelectItem value="3">Loja 3</SelectItem>
+                {data?.lojas &&
+                  data?.lojas.map((loja) => (
+                    <SelectItem key={loja.id} value={loja.id!.toString()}>
+                      {loja.nome}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           )}
@@ -201,14 +244,18 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
               onValueChange={(e) => {
                 field.onChange(Number(e));
               }}
+              defaultValue={field.value ? field.value.toString() : ""}
             >
               <SelectTrigger className="w-[180px] border-violet-700 rounded-lg  focus:ring-0 focus:ring-violet-700 ">
                 <SelectValue placeholder="Selecione a pessoa" />
               </SelectTrigger>
               <SelectContent className="">
-                <SelectItem value="49">pessoa 1</SelectItem>
-                <SelectItem value="51">pessoa 2</SelectItem>
-                <SelectItem value="52">pessoa 3</SelectItem>
+                {data?.pessoas &&
+                  data?.pessoas.map((pessoa) => (
+                    <SelectItem key={pessoa.id} value={pessoa.id!.toString()}>
+                      {pessoa.nome}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           )}
@@ -218,7 +265,7 @@ const FormCompra = ({ closedDialog, compra }: FormCompraProps) => {
             className="bg-violet-700 w-28 text-white rounded-md py-2 hover:bg-violet-900 shadow-xl"
             type="submit"
           >
-            Cadastrar
+            {compra ? "Editar" : "Cadastrar"}
           </button>
         </div>
       </form>

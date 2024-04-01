@@ -8,5 +8,6 @@ import { PessoaController } from './pessoa.controller';
   providers: [PessoaService],
   imports: [TypeOrmModule.forFeature([Pessoa])],
   controllers: [PessoaController],
+  exports: [PessoaService],
 })
 export class PessoaModule {}

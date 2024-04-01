@@ -22,8 +22,8 @@ const Compras = () => {
         <DialogCompra className=" self-end" title="Cadastrar"></DialogCompra>
       </section>
 
-      <section className="sm:pt-8 pt-5 w-full  ">
-        <ul className="w-full flex flex-col gap-3  overflow-y-auto">
+      <section className="sm:pt-8 pt-2 w-full  flex flex-col gap-4">
+        <ul className="w-full flex flex-col gap-2 overflow-y-auto">
           {data?.items &&
             data.items.map((compra) => (
               <li className="flex flex-col gap-2" key={compra.id}>

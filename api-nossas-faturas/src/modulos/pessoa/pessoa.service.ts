@@ -10,7 +10,11 @@ export class PessoaService {
   constructor(
     @InjectRepository(Pessoa) private pessoaRepository: Repository<Pessoa>,
   ) {}
-  getPessoas(options: IPaginationOptions) {
+  getPessoas() {
+    return this.pessoaRepository.find();
+  }
+
+  getPessoasPaginate(options: IPaginationOptions) {
     return paginate<Pessoa>(this.pessoaRepository, options, {
       order: { id: 'DESC' },
     });

@@ -14,7 +14,11 @@ export class LojaService {
   async createLoja(loja: CreateLoja) {
     return (await this.lojaRepository.save(loja)).id;
   }
-  async getLojas(options: IPaginationOptions) {
+  async getLojas() {
+    return this.lojaRepository.find();
+  }
+
+  async getLojasPaginate(options: IPaginationOptions) {
     return paginate<Loja>(this.lojaRepository, options, {
       order: { id: 'DESC' },
     });

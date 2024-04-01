@@ -15,7 +15,7 @@ const Header = () => {
   };
   return (
     <>
-      <header className="bg-indigo-950 w-full h-16 flex items-center shadow-xl justify-between z-10 ">
+      <header className="bg-indigo-950 w-full h-16 flex items-center shadow-xl justify-between ">
         <h1
           style={estiloDoComponente}
           className="md:px-5 p-3 md:text-5xl text-3xl"

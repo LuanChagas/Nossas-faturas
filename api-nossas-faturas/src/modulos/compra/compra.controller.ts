@@ -4,6 +4,7 @@ import {
   DefaultValuePipe,
   Get,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UsePipes,
@@ -36,6 +37,17 @@ export class CompraController {
       message: 'Compra criada com sucesso!',
       id: compra.id,
       statusCode: 201,
+    };
+  }
+
+  @Patch()
+  @UsePipes(ValidationPipe)
+  async editarCompra(@Body() compraEdit: CreateCompra) {
+    const compra = await this.compraService.editarCompra(compraEdit);
+    return {
+      message: 'Compra editada com sucesso!',
+      id: compra.id,
+      statusCode: 200,
     };
   }
 }

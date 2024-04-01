@@ -1,4 +1,3 @@
-import { LockClosedIcon } from "@radix-ui/react-icons";
 import { AlertDescription } from "../../ui/alert";
 
 type ErrosInputsProps = {

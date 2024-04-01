@@ -27,7 +27,7 @@ export class LojaController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
   ) {
     limit = limit > 100 ? 100 : limit;
-    return this.lojaService.getLojas({
+    return this.lojaService.getLojasPaginate({
       page,
       limit,
       route: 'lojas',

@@ -1,15 +1,16 @@
 import { IdCardIcon } from "@radix-ui/react-icons";
 import { BackpackIcon, FileText, HomeIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 interface ItensNavegacaoProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
+  const baseNavlink = "flex justify-between";
   return (
     <>
-      <section className="flex flex-col h-full justify-between py-14 w-full pl-5">
+      <section className="flex flex-col h-full justify-between pt-14 w-full pl-5">
         <ul className=" flex flex-col gap-5 items-center w-full">
           <li className="flex w-full justify-start ">
             <div>
@@ -21,18 +22,33 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
           </li>
 
           <li className="flex w-full justify-start">
-            <div>
-              <FileText />
-            </div>
-
-            <div className="pl-3 w-full">
-              <span>Relatórios</span>
-            </div>
+            <NavLink
+              to={"transacoes"}
+              className={({ isActive }) => {
+                return isActive
+                  ? `border-indigo-900 border-l-4 pl-2 transition-all duration-200 ease-in-out ${baseNavlink}`
+                  : baseNavlink;
+              }}
+              onClick={() => {
+                if (setOpen) setOpen(!open);
+              }}
+            >
+              <div>
+                <FileText />
+              </div>
+              <div className="pl-3 w-full">
+                <span>Transações</span>
+              </div>
+            </NavLink>
           </li>
           <li className="flex w-full justify-start">
-            <Link
+            <NavLink
               to={"compras"}
-              className="flex justify-between"
+              className={({ isActive }) => {
+                return isActive
+                  ? `border-indigo-900 border-l-4 pl-2 transition-all duration-200 ease-in-out ${baseNavlink}`
+                  : baseNavlink;
+              }}
               onClick={() => {
                 if (setOpen) setOpen(!open);
               }}
@@ -44,12 +60,16 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
               <div className="pl-3 ">
                 <span> Compras</span>
               </div>
-            </Link>
+            </NavLink>
           </li>
           <li className="flex w-full justify-start">
-            <Link
+            <NavLink
               to={"cadastro"}
-              className="flex justify-between"
+              className={({ isActive }) => {
+                return isActive
+                  ? `border-indigo-900 border-l-4 pl-2 transition-all duration-200 ease-in-out ${baseNavlink}`
+                  : baseNavlink;
+              }}
               onClick={() => {
                 if (setOpen) setOpen(!open);
               }}
@@ -60,7 +80,7 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
               <div className="pl-3 w-full">
                 <span>Cadastros</span>
               </div>
-            </Link>
+            </NavLink>
           </li>
         </ul>
 

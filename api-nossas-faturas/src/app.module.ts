@@ -9,6 +9,8 @@ import { FaturaModule } from './modulos/fatura/fatura.module';
 import { CompraModule } from './modulos/compra/compra.module';
 import { FaturaCompraModule } from './modulos/fatura-compra/fatura-compra.module';
 import { LojaModule } from './modulos/loja/loja.module';
+import { GeralModule } from './modulos/geral/geral.module';
+import { TransacaoModule } from './modulos/transacao/transacao.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { LojaModule } from './modulos/loja/loja.module';
     CompraModule,
     FaturaCompraModule,
     LojaModule,
+    GeralModule,
+    TransacaoModule,
   ],
 
   providers: [AppService],

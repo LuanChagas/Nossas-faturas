@@ -1,3 +1,4 @@
+import { getDadosSelect } from "@/api/SelectData";
 import {
   showToastError,
   showToastSucess,
@@ -18,6 +19,14 @@ export const useQueryCompra = (
       requestApi(url).then((response) => {
         return response.data;
       }),
+  });
+  return { data, isLoading, isError };
+};
+
+export const useQueryDataSelect = () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["selectData"],
+    queryFn: () => getDadosSelect().then((response) => response.data),
   });
   return { data, isLoading, isError };
 };

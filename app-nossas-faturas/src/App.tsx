@@ -12,7 +12,10 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <Header></Header>
-        <section className="flex h-screen">
+        <section
+          className="flex flex-grow"
+          style={{ height: "calc(100vh - 4rem)" }}
+        >
           <NavBar className="hidden md:flex"></NavBar>
           <MainContent></MainContent>
         </section>

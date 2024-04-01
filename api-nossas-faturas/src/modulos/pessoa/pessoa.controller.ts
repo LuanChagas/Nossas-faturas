@@ -28,7 +28,7 @@ export class PessoaController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
   ) {
     limit = limit > 100 ? 100 : limit;
-    return this.pessoaService.getPessoas({
+    return this.pessoaService.getPessoasPaginate({
       page,
       limit,
       route: 'pessoas',

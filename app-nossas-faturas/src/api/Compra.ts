@@ -9,3 +9,7 @@ export const getCompras = (url: string) => {
 export const createCompraApi = (compra: CreateCompra) => {
   return axios.post<ResponseApi>(`${API_URL}/compra`, compra);
 };
+
+export const updateCompraApi = (compra: CreateCompra) => {
+  return axios.patch<ResponseApi>(`${API_URL}/compra/`, compra);
+};

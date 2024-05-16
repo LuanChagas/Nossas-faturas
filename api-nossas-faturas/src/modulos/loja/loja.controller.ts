@@ -11,16 +11,20 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { LojaService } from './loja.service';
 import { CreateLoja, UpdateLoja } from './loja.validation';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/guards/jwt-auth-guard.guard';
 
 @Controller('loja')
+@UseGuards(JwtAuthGuard)
 export class LojaController {
   constructor(private lojaService: LojaService) {}
+
   @Get('lojas')
   async getLojas(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,

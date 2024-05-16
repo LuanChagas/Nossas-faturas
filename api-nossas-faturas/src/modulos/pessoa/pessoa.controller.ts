@@ -11,6 +11,7 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -18,8 +19,10 @@ import { PessoaService } from './pessoa.service';
 
 import { Response } from 'express';
 import { CreatePessoa, UpdatePessoa } from './pessoa.validation';
+import { JwtAuthGuard } from 'src/guards/jwt-auth-guard.guard';
 
 @Controller('pessoa')
+@UseGuards(JwtAuthGuard)
 export class PessoaController {
   constructor(private pessoaService: PessoaService) {}
   @Get('pessoas')

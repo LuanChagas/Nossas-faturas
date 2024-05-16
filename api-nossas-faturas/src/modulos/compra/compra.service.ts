@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Compra } from './compra.entity';
 
@@ -12,7 +12,7 @@ import { Cartao } from '../cartao/cartao.entity';
 import { FaturaCompra } from '../fatura-compra/fatura-compra.entity';
 import { FaturaCompraService } from '../fatura-compra/fatura-compra.service';
 import { Pessoa } from '../pessoa/pessoa.entity';
-
+import { EntityManager } from 'typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
@@ -23,6 +23,7 @@ export class CompraService {
     private readonly faturaService: FaturaService,
     private readonly cartaoService: CartaoService,
     private readonly faturaCompraService: FaturaCompraService,
+    @InjectEntityManager() private entityManager: EntityManager,
   ) {}
 
   async criarCompra(createCompra: CreateCompra) {
@@ -31,6 +32,7 @@ export class CompraService {
     const faturaAberta = await this.processarFaturaAberta(compra);
     const dataInicial = new Date(faturaAberta.data);
     const dataFinal = new Date(faturaAberta.data);
+    dataFinal.setMonth(dataInicial.getMonth() + compra.parcelas - 1);
     if (compra.parcelas === 1) return compra;
     const { arrayCriarFaturas, arrayUpdateFaturas } =
       await this.distribuirValorPorFaturas(dataInicial, dataFinal, compra);

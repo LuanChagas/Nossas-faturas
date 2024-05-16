@@ -18,14 +18,13 @@ import { cn } from "@/lib/utils";
 import { ptBR } from "date-fns/locale";
 import { createCompraApi, updateCompraApi } from "@/api/Compra";
 import { removeMoeda } from "@/utils/masks/RemoveMask";
-import {
-  useGetUrlQuery,
-  useMutatationCompra,
-  useQueryDataSelect,
-} from "@/Hooks/CompraHooks";
+
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
 import React from "react";
 import ErrosInputs from "../shared/global/ErrosInputs";
+import { useQueryDataSelect } from "@/Hooks/Compra/UseQueryDataSelect";
+import { useGetUrlQuery } from "@/Hooks/Compra/UseGetUrlQuery";
+import { useMutatationCompra } from "@/Hooks/Compra/UseMutationCompra";
 
 interface FormCompraProps {
   closedDialog: React.Dispatch<React.SetStateAction<boolean>>;

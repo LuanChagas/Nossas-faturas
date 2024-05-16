@@ -24,6 +24,7 @@ const ItensNavegacao = ({ setOpen }: ItensNavegacaoProps) => {
           <li className="flex w-full justify-start">
             <NavLink
               to={"transacoes"}
+              defaultChecked
               className={({ isActive }) => {
                 return isActive
                   ? `border-indigo-900 border-l-4 pl-2 transition-all duration-200 ease-in-out ${baseNavlink}`

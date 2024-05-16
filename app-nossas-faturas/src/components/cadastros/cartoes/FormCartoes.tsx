@@ -3,10 +3,11 @@ import Label from "../../shared/global/Label";
 import { Controller, useForm } from "react-hook-form";
 import ErrosInputs from "../../shared/global/ErrosInputs";
 import { formatoMoeda } from "@/utils/masks/ValueMask";
-import { useMutatationCartoes } from "@/Hooks/CartaoHooks";
+
 import { createCartaoApi, updateCartaoApi } from "@/api/CartaoApi";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
 import { removeMoeda } from "@/utils/masks/RemoveMask";
+import { useMutatationCartoes } from "@/Hooks/Cartao/UseMutationCartao";
 
 type CadastroCartoesProps = {
   closedDialog: React.Dispatch<React.SetStateAction<boolean>>;

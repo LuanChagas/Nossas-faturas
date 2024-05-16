@@ -17,3 +17,15 @@ interface TransacaoAgrupada {
   total: number;
   transacoes: Transacao[];
 }
+
+interface FiltroBody {
+  cartoes: { id: number }[];
+  pessoas: { id: number }[];
+  fatura: string;
+}
+
+interface FiltroQuery {
+  cartoes: number[];
+  pessoas: number[];
+  fatura: string;
+}

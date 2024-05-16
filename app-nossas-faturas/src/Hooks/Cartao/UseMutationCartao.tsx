@@ -3,27 +3,8 @@ import {
   showToastSucess,
 } from "@/components/shared/global/ShowToast";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
-
-export const useQueryCartao = (
-  key: string,
-  url: string,
-  requestApi: (url: string) => Promise<AxiosResponse<CartaoPaginated>>
-) => {
-  const {
-    data: dataCartao,
-    isLoading: isLoadingCartao,
-    isError: isErrorCartao,
-  } = useQuery({
-    queryKey: [key, url],
-    queryFn: () =>
-      requestApi(url).then((response) => {
-        return response.data;
-      }),
-  });
-  return { dataCartao, isLoadingCartao, isErrorCartao };
-};
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
 
 export const useMutatationCartoes = (
   urlQuery: string,
@@ -44,6 +25,13 @@ export const useMutatationCartoes = (
       showToastSucess(`Cartão ${mensagemSucess} com sucesso!`, tipo);
     },
     onError: (error) => {
+      const erroAxios = error as AxiosError;
+      if (
+        erroAxios.response?.status === 401 ||
+        erroAxios.response?.status === 403
+      ) {
+        window.location.href = "/login";
+      }
       showToastError(
         `Erro ao ${mensagemError} cartão!`,
         tipo === EAcaoMutationHooks.EXCLUIR

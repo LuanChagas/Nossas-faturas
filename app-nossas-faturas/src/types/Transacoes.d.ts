@@ -8,6 +8,12 @@ interface FiltroTransacoes extends Omit<FiltroTransacoesResponse, "faturas"> {
   fatura: string;
 }
 
+interface FiltroTransacoesRequest {
+  cartoes: number[];
+  pessoas: number[];
+  fatura: string;
+}
+
 interface Transacao {
   cartao: {
     id: number;

@@ -4,10 +4,11 @@ import React from "react";
 import PaginationShared from "@/components/shared/global/PaginationShared";
 
 import AlertDelete from "@/components/shared/global/AlertDelete";
-import { useMutationPessoaHook } from "@/Hooks/PessoaHooks";
+
 import { deletePessoaApi } from "@/api/PessoaApi";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
 import DialogFormsCadastro from "@/components/shared/Cadastros/DialogFormsCadastro";
+import { useMutationPessoaHook } from "@/Hooks/Pessoa/UseMutationPessoa";
 
 interface PessoasProps {
   data?: PessoaPaginated;

@@ -1,35 +1,10 @@
-import { getDadosSelect } from "@/api/SelectData";
 import {
   showToastError,
   showToastSucess,
 } from "@/components/shared/global/ShowToast";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
-import { useLocation } from "react-router-dom";
-
-export const useQueryCompra = (
-  key: string,
-  url: string,
-  requestApi: (url: string) => Promise<AxiosResponse<CompraPaginated>>
-) => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: [key, url],
-    queryFn: () =>
-      requestApi(url).then((response) => {
-        return response.data;
-      }),
-  });
-  return { data, isLoading, isError };
-};
-
-export const useQueryDataSelect = () => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["selectData"],
-    queryFn: () => getDadosSelect().then((response) => response.data),
-  });
-  return { data, isLoading, isError };
-};
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
 
 export const useMutatationCompra = (
   urlQuery: string,
@@ -50,6 +25,10 @@ export const useMutatationCompra = (
       showToastSucess(`Compra ${mensagemSucess} com sucesso!`, tipo);
     },
     onError: (error) => {
+      const erroAxios = error as AxiosError;
+      if (erroAxios.status === 401 || erroAxios.status === 403) {
+        window.location.href = "/login";
+      }
       showToastError(
         `Erro ao ${mensagemError} compra!`,
         tipo === EAcaoMutationHooks.EXCLUIR
@@ -61,14 +40,6 @@ export const useMutatationCompra = (
       console.log(error);
     },
   });
-};
-
-export const useGetUrlQuery = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const page = queryParams.get("page") || "1";
-  const limit = queryParams.get("limit") || "10";
-  return `compras?page=${page}&limit=${limit}`;
 };
 
 function tipoMensagemSucess(tipo: EAcaoMutationHooks) {

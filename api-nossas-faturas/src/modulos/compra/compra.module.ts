@@ -6,6 +6,7 @@ import { Compra } from './compra.entity';
 import { FaturaModule } from '../fatura/fatura.module';
 import { CartaoModule } from '../cartao/cartao.module';
 import { FaturaCompraModule } from '../fatura-compra/fatura-compra.module';
+import { AutenticacaoModule } from '../autenticacao/Autenticacao.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { FaturaCompraModule } from '../fatura-compra/fatura-compra.module';
     FaturaModule,
     CartaoModule,
     FaturaCompraModule,
+    AutenticacaoModule,
   ],
   controllers: [CompraController],
   providers: [CompraService],

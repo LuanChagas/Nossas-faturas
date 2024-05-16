@@ -6,16 +6,20 @@ import ListaLojas from "../components/cadastros/lojas/ListaLojas";
 import React from "react";
 import ListaPessoas from "../components/cadastros/pessoas/ListaPessoas";
 
-import { useQueryPessoaHook } from "@/Hooks/PessoaHooks";
 import { getPessoasApi } from "@/api/PessoaApi";
 import { getLojasApi } from "@/api/lojaApi";
-import { useQueryLojaHook } from "@/Hooks/LojaHooks";
 
-import { useQueryCartao } from "@/Hooks/CartaoHooks";
 import { getCartoesApi } from "@/api/CartaoApi";
 import DialogFormsCadastro from "../components/shared/Cadastros/DialogFormsCadastro";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import { HandleAxiosError } from "@/utils/handles/HandleAxiosError";
+import { useQueryCartao } from "@/Hooks/Cartao/UseQueryCartao";
+import { useQueryLojaHook } from "@/Hooks/Loja/UseQueryLoja";
+import { useQueryPessoaHook } from "@/Hooks/Pessoa/UseQueryPessoa";
 
 const Cadastros = () => {
+  const navigate = useNavigate();
   const [componentOpen, setComponentOpen] = React.useState<number>(1);
   const [title, setTitle] = React.useState<string>("Cadastrar Loja");
   const [urlQuery, setUrlQuery] = React.useState<string>(
@@ -33,23 +37,29 @@ const Cadastros = () => {
     setComponentOpen(component);
   }
 
-  const { dataPessoa, isLoadingPessoa, isErrorPessoa } = useQueryPessoaHook(
-    "getPessoas",
-    urlPessoa,
-    getPessoasApi
-  );
+  const { dataPessoa, isLoadingPessoa, isErrorPessoa, errorPessoa } =
+    useQueryPessoaHook("getPessoas", urlPessoa, getPessoasApi);
 
-  const { dataLoja, isLoadingLoja, isErrorLoja } = useQueryLojaHook(
+  const { dataLoja, isLoadingLoja, isErrorLoja, errorLoja } = useQueryLojaHook(
     "getLojas",
     urlLoja,
     getLojasApi
   );
 
-  const { dataCartao, isLoadingCartao, isErrorCartao } = useQueryCartao(
-    "getCartoes",
-    urlCartao,
-    getCartoesApi
-  );
+  const { dataCartao, isLoadingCartao, isErrorCartao, errorCartao } =
+    useQueryCartao("getCartoes", urlCartao, getCartoesApi);
+
+  if (isLoadingPessoa || isLoadingLoja || isLoadingCartao)
+    return <h1>Carregando...</h1>;
+
+  if (isErrorPessoa || isErrorLoja || isErrorCartao) {
+    const erroAxiosCartao = errorCartao as AxiosError;
+    const erroAxiosLoja = errorLoja as AxiosError;
+    const erroAxiosPessoa = errorPessoa as AxiosError;
+    HandleAxiosError(erroAxiosCartao, navigate);
+    HandleAxiosError(erroAxiosLoja, navigate);
+    HandleAxiosError(erroAxiosPessoa, navigate);
+  }
 
   return (
     <>

@@ -12,10 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { HandleAxiosError } from "@/utils/handles/HandleAxiosError";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Transacoes = () => {
   const [filtro, setFiltro] = useState<FiltroTransacoes>({
@@ -25,20 +27,21 @@ const Transacoes = () => {
   });
 
   const [open, setOpen] = useState(false);
-
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["getTransacoes"],
+  const navigate = useNavigate();
+  const { data, error } = useQuery({
+    queryKey: ["getTransacoes", filtro],
     queryFn: async () => {
-      getTransacoes(filtro).then((result) => {
-        console.log(result.data);
-      });
+      console.log("dez");
       return getTransacoes(filtro).then((result) => result.data);
     },
   });
 
-  function getTransacoesFiltro() {
-    console.log(filtro);
-    refetch();
+  if (error) {
+    HandleAxiosError(error, navigate);
+  }
+
+  function getTransacoesComFiltro(dados: FiltroTransacoes) {
+    setFiltro(dados);
   }
 
   return (
@@ -48,8 +51,7 @@ const Transacoes = () => {
         <DialogTransacoes
           open={open}
           setOpen={setOpen}
-          filtro={setFiltro}
-          getTransacoes={getTransacoesFiltro}
+          getTransacoes={getTransacoesComFiltro}
         ></DialogTransacoes>
       </section>
 
@@ -146,8 +148,8 @@ const Transacoes = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {transacoes.transacoes.map((transacao) => (
-                        <TableRow>
+                      {transacoes.transacoes.map((transacao, index) => (
+                        <TableRow key={index}>
                           <TableCell className="font-medium text-center">
                             {transacao.loja}
                           </TableCell>

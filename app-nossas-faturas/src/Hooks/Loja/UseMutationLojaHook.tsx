@@ -3,23 +3,8 @@ import {
   showToastSucess,
 } from "@/components/shared/global/ShowToast";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
-
-export const useQueryLojaHook = <T,>(
-  key: string,
-  url: string,
-  requestApi: (url: string) => Promise<AxiosResponse<T>>
-) => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: [key, url],
-    queryFn: () => requestApi(url).then((response) => response.data),
-  });
-  const dataLoja = data;
-  const isLoadingLoja = isLoading;
-  const isErrorLoja = isError;
-  return { dataLoja, isLoadingLoja, isErrorLoja };
-};
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
 
 export const useMutationLojaHook = (
   urlQuery: string,
@@ -49,6 +34,13 @@ export const useMutationLojaHook = (
       showToastSucess(`Loja ${tipoMensagemSucess} com sucesso!`, tipo);
     },
     onError: (error) => {
+      const erroAxios = error as AxiosError;
+      if (
+        erroAxios.response?.status === 401 ||
+        erroAxios.response?.status === 403
+      ) {
+        window.location.href = "/login";
+      }
       showToastError(`Erro ao ${tipoMensagemError} loja!`);
       console.log(error);
     },

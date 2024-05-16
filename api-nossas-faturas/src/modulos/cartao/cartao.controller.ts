@@ -11,14 +11,17 @@ import {
   Put,
   Query,
   Res,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CartaoService } from './cartao.service';
 import { Response } from 'express';
 import { CreateCartao, UpdateCartao } from './cartao.validation';
+import { JwtAuthGuard } from 'src/guards/jwt-auth-guard.guard';
 
 @Controller('cartao')
+@UseGuards(JwtAuthGuard)
 export class CartaoController {
   constructor(private cartaoService: CartaoService) {}
   @Get('cartoes')

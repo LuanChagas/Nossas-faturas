@@ -2,9 +2,10 @@ import Input from "../../shared/global/Input";
 import Label from "../../shared/global/Label";
 import { Controller, useForm } from "react-hook-form";
 import ErrosInputs from "../../shared/global/ErrosInputs";
-import { useMutationPessoaHook } from "@/Hooks/PessoaHooks";
+
 import { createPessoaApi, updatePessoaApi } from "@/api/PessoaApi";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
+import { useMutationPessoaHook } from "@/Hooks/Pessoa/UseMutationPessoa";
 
 type CadastroPessoaProps = {
   closedDialog: React.Dispatch<React.SetStateAction<boolean>>;

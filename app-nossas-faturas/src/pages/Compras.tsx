@@ -1,20 +1,27 @@
-import { useGetUrlQuery } from "@/Hooks/CompraHooks";
+import { useGetUrlQuery } from "@/Hooks/Compra/UseGetUrlQuery";
 import { getCompras } from "@/api/Compra";
 import DialogCompra from "@/components/Compras/DialogCompra";
 import PaginationShared from "@/components/shared/global/PaginationShared";
 import TituloConteudoMain from "@/components/shared/global/TituloConteudoMain";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { HandleAxiosError } from "@/utils/handles/HandleAxiosError";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const Compras = () => {
   const urlQuery = useGetUrlQuery();
-  const { data } = useQuery({
+  const navigate = useNavigate();
+  const { data, error } = useQuery({
     queryKey: ["getCompras", urlQuery],
     queryFn: async () => {
       console.log(await getCompras(urlQuery).then((result) => result.data));
       return getCompras(urlQuery).then((result) => result.data);
     },
   });
+
+  if (error) {
+    HandleAxiosError(error, navigate);
+  }
   return (
     <>
       <section className="header-compras flex flex-col justify-between">

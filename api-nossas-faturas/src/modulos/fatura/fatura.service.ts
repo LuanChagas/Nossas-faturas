@@ -103,6 +103,23 @@ export class FaturaService {
     }
   }
 
+  async buscarIntervaloFaturas() {
+    const dados = (await this.faturaRepository
+      .createQueryBuilder('faturas')
+      .where(
+        "data BETWEEN (CURRENT_DATE - INTERVAL '6 months') AND (CURRENT_DATE + INTERVAL '6 months')",
+      )
+      .select(
+        "LPAD(CAST(EXTRACT(MONTH FROM faturas.data) AS TEXT), 2, '0') || '-' || CAST(EXTRACT(YEAR FROM faturas.data) AS TEXT) as data_fatura",
+      )
+      .groupBy(
+        '  EXTRACT(MONTH FROM faturas.data), EXTRACT(YEAR FROM faturas.data) ',
+      )
+      .orderBy('EXTRACT(YEAR FROM faturas.data)')
+      .getRawMany()) as { data_fatura: string }[];
+    return dados.map((dados) => dados.data_fatura);
+  }
+
   private async rotinaFecharFatura(
     cartoes: Cartao[],
     faturas: Fatura[],

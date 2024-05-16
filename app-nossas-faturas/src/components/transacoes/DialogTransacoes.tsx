@@ -23,14 +23,12 @@ import { Controller, useForm } from "react-hook-form";
 
 interface DialogTransacoesProps {
   open: boolean;
-  filtro: React.Dispatch<React.SetStateAction<FiltroTransacoes>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   getTransacoes: (filtro: FiltroTransacoes) => void;
 }
 
 const DialogTransacoes = ({
   open,
-  filtro,
   setOpen,
   getTransacoes,
 }: DialogTransacoesProps) => {
@@ -42,11 +40,10 @@ const DialogTransacoes = ({
     },
   });
 
-  const onSubmit = (data: FiltroTransacoes) => {
-    filtro(data);
-    getTransacoes(data);
+  const onSubmit = (dados: FiltroTransacoes) => {
+    getTransacoes(dados);
   };
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: ["getFiltroTransacoes"],
     queryFn: async () => {
       return getDadosFiltroTransacoes().then((result) => result.data);
@@ -170,7 +167,7 @@ const DialogTransacoes = ({
                       <SelectContent className="">
                         {data?.faturas.map((fatura, index) => (
                           <SelectItem
-                            key={fatura}
+                            key={index}
                             value={`${fatura}`}
                             className="hover:bg-violet-700 hover:text-white"
                           >

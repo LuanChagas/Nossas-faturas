@@ -3,7 +3,6 @@ import ListaCadastros from "../../shared/Cadastros/ListaCadastros";
 
 import AlertDelete from "@/components/shared/global/AlertDelete";
 import { formatoMoeda } from "@/utils/masks/ValueMask";
-import { useMutatationCartoes } from "@/Hooks/CartaoHooks";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
 import { deleteCartaoApi } from "@/api/CartaoApi";
 import PaginationShared from "@/components/shared/global/PaginationShared";
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DialogFormsCadastro from "@/components/shared/Cadastros/DialogFormsCadastro";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useMutatationCartoes } from "@/Hooks/Cartao/UseMutationCartao";
 
 interface cartoesProps {
   data?: CartaoPaginated;

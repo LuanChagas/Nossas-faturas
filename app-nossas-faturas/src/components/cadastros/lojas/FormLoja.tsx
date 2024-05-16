@@ -3,9 +3,9 @@ import { Controller, useForm } from "react-hook-form";
 import ErrosInputs from "../../shared/global/ErrosInputs";
 import Input from "../../shared/global/Input";
 
-import { useMutationLojaHook } from "@/Hooks/LojaHooks";
 import { createLojaApi, updateLojaApi } from "@/api/lojaApi";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
+import { useMutationLojaHook } from "@/Hooks/Loja/UseMutationLojaHook";
 
 type CadastroLojaProps = {
   closedDialog: React.Dispatch<React.SetStateAction<boolean>>;

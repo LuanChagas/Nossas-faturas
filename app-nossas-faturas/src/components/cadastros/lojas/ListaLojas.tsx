@@ -2,10 +2,10 @@ import ListaCadastros from "../../shared/Cadastros/ListaCadastros";
 import PaginationShared from "../../shared/global/PaginationShared";
 
 import AlertDelete from "@/components/shared/global/AlertDelete";
-import { useMutationLojaHook } from "@/Hooks/LojaHooks";
 import { deleteLojaApi } from "@/api/lojaApi";
 import { EAcaoMutationHooks } from "@/types/HooksCustom";
 import DialogFormsCadastro from "../../shared/Cadastros/DialogFormsCadastro";
+import { useMutationLojaHook } from "@/Hooks/Loja/UseMutationLojaHook";
 
 interface LojasProps {
   data?: LojaPaginated;

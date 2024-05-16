@@ -7,13 +7,16 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CompraService } from './compra.service';
 import { CreateCompra } from './compra.validation';
+import { JwtAuthGuard } from 'src/guards/jwt-auth-guard.guard';
 
 @Controller('compra')
+@UseGuards(JwtAuthGuard)
 export class CompraController {
   constructor(private compraService: CompraService) {}
   @Get('compras')

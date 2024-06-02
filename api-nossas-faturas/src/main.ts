@@ -20,7 +20,3 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
-
-// TODO terminar comprar
-// TODO salvar comprar no banco
-// TODO Salvar na tabela fatura_compra

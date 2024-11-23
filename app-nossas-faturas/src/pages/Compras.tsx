@@ -48,7 +48,7 @@ const Compras = () => {
                         <h4>{compra.descricao}</h4>
                         <h4>
                           Data da compra:
-                          <span className="font-semibold">
+                          <span className="font-semibold align">
                             {compra.data_compra.toString()}
                           </span>
                         </h4>

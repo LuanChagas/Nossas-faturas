@@ -21,6 +21,4 @@ async function bootstrap() {
 }
 bootstrap();
 
-// TODO terminar comprar
-// TODO salvar comprar no banco
-// TODO Salvar na tabela fatura_compra
+
